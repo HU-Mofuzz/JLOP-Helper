@@ -1,0 +1,30 @@
+plugins {
+    id 'java'
+}
+
+archivesBaseName = "LoHelper"
+group = "helper"
+version = "Lo"
+sourceCompatibility = '17'
+
+repositories {
+    //All sub-projects will now refer to the same 'libs' directory
+    flatDir {
+        dirs "$rootProject.projectDir/lib"
+    }
+    mavenCentral()
+}
+
+jar {
+    manifest {
+        attributes "Main-Class": "org.openoffice.sdk.example.documenthandling.LoLoader"
+    }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+}
+
+dependencies {
+    implementation files('lib/java_uno.jar')
+    implementation files('lib/libreoffice.jar')
+    implementation fileTree('lib/')
+}
